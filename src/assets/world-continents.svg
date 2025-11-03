@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 550" aria-label="Mapa del mundo interactivo">
+  <style>
+    .continent {
+      cursor: pointer;
+      transition: transform 0.2s ease-in-out, filter 0.2s ease-in-out;
+      outline: none;
+    }
+
+    .continent:focus {
+      filter: brightness(1.15);
+      stroke: #0ea5e9;
+      stroke-width: 2;
+    }
+
+    .continent:hover {
+      filter: brightness(1.1);
+    }
+  </style>
+  <title>Mapa del mundo por regiones</title>
+  <g fill="#bae6fd" stroke="#0f172a" stroke-width="0.5" stroke-linejoin="round">
+    <path id="americas_north" class="continent" tabindex="0" role="button" aria-label="América del Norte" d="M155 59c-17-1-42 9-57 23-16 14-28 42-29 65-1 19 8 39 10 59l-23 12c-6 4-10 13-9 20 2 11 9 23 18 30 16 11 33 21 50 31l28 18c12 8 25 16 38 9 8-4 11-14 16-22 6-8 16-15 18-25 1-6-3-11-6-17-6-13-9-26-11-40-2-23 8-46 21-64 9-12 21-23 27-37 4-10 6-23 1-33-5-9-14-16-24-20-12-5-26-7-38-8z" />
+    <path id="americas_central" class="continent" tabindex="0" role="button" aria-label="América Central" d="M254 229c-10-1-21 4-27 11-5 5-8 12-7 19 1 6 6 11 10 16 9 11 21 21 34 26 9 3 21 4 28-2 5-5 6-12 6-18 0-17-6-34-16-48-6-8-16-14-27-14z" />
+    <path id="americas_south" class="continent" tabindex="0" role="button" aria-label="América del Sur" d="M330 194c-14 3-25 14-32 26-11 18-21 38-21 59 0 19 6 38 11 56 6 20 12 42 25 59 6 7 14 13 23 16 10 3 22 3 30-4 9-7 11-20 15-31 7-18 20-34 22-53 2-13-3-26-6-39-5-21-4-43-7-64-2-11-6-22-13-30-9-10-24-16-36-14z" />
+    <path id="europe" class="continent" tabindex="0" role="button" aria-label="Europa" d="M507 107c-11 1-22 6-30 14-12 12-21 27-28 42-6 13-11 27-9 41 1 10 6 18 12 26 11 13 26 20 42 25 16 4 33 6 49 2 15-3 28-11 40-20 10-8 18-19 19-31 0-12-7-23-14-33-10-15-21-30-35-41-11-9-26-15-40-14z" />
+    <path id="asia" class="continent" tabindex="0" role="button" aria-label="Asia" d="M639 79c-16 2-31 8-44 17-18 13-32 30-45 48-11 15-21 30-26 48-3 11-4 22-1 33 4 14 13 25 22 36 17 19 37 35 59 48 19 10 40 18 61 18 22 0 44-9 60-24 14-14 21-34 26-53 6-23 12-47 8-70-3-19-12-37-25-51-20-21-47-34-75-47-5-2-9-3-14-3z" />
+    <path id="middle_east" class="continent" tabindex="0" role="button" aria-label="Medio Oriente" d="M578 223c-13 1-25 7-33 17-10 13-17 28-19 44-2 12-1 25 5 36 7 12 18 22 30 29 13 8 29 11 43 9 13-2 25-9 34-18 9-9 16-21 17-34 2-14-3-28-10-39-8-13-19-23-32-30-10-6-21-9-33-8z" />
+    <path id="africa" class="continent" tabindex="0" role="button" aria-label="África" d="M510 254c-18 2-34 11-47 23-13 13-24 29-33 45-10 18-20 37-23 57-3 16-1 33 7 47 8 15 21 26 35 36 16 11 33 21 52 26 16 4 34 5 50-1 17-6 30-20 39-35 12-18 21-38 27-59 6-20 10-41 7-61-3-17-11-34-24-46-17-16-40-25-63-31-9-2-18-2-27-1z" />
+    <path id="oceania" class="continent" tabindex="0" role="button" aria-label="Oceanía" d="M823 329c-12 1-22 6-31 14-9 9-16 21-19 34-2 9-2 19 1 28 3 10 10 18 18 24 11 9 24 15 38 18 10 2 21 2 30-3 9-5 15-14 19-23 5-12 9-25 6-38-2-10-8-19-15-27-11-11-26-19-41-26-2-1-4-1-6-1z" />
+    <path id="melanesia" class="continent" tabindex="0" role="button" aria-label="Melanesia" d="M894 315c-6 1-11 4-15 8-5 5-9 11-10 18-2 6-1 14 2 20 4 7 10 13 16 17 7 5 16 8 24 7 7-1 13-5 17-10 5-6 8-14 7-22-1-8-5-16-10-22-6-7-14-12-22-16-3-1-5-1-9-0z" />
+    <path id="antarctica" class="continent" tabindex="0" role="button" aria-label="Antártida" d="M159 462c-25 0-51 10-69 28-13 14-19 31-25 48-5 14-8 31 1 44 7 11 19 17 31 21 25 8 51 12 77 16 35 4 70 6 105 6h311c35 0 71-2 106-6 25-3 50-7 74-15 11-3 22-9 29-18 9-13 7-31 1-45-7-18-16-37-32-49-22-17-51-23-79-25-78-7-157 1-235 12-73 11-147 24-221 26-25 1-50-2-75-3z" />
+  </g>
+</svg>

@@ -26,17 +26,21 @@ const GameContext = createContext<GameState | undefined>(undefined);
 export const GameProvider = ({ children }: { children: ReactNode }) => {
   const [currentPage, setPage] = useState<Page>('home');
   const [activeSlotId, setActiveSlotId] = useState<number | null>(1); // Default to slot 1
-  const [gameSettings, setGameSettingsState] = useState({
+  const [gameSettings, setGameSettingsState] = useState<GameState['gameSettings']>({
     difficulty: 1 as Difficulty,
     count: 5,
-    regionId: undefined,
   });
 
-  const currentPlayer = useLiveQuery(
-    () => (activeSlotId ? db.saves.get(activeSlotId) : Promise.resolve(null)),
-    [activeSlotId],
-    null
-  );
+  const currentPlayer = useLiveQuery<SaveSlot | null>(
+    async () => {
+      if (!activeSlotId) {
+        return null;
+      }
+      const player = await db.saves.get(activeSlotId);
+      return player ?? null;
+    },
+    [activeSlotId]
+  ) ?? null;
 
   const updatePlayerName = useCallback(async (name: string) => {
     if (!activeSlotId) return;
@@ -57,16 +61,16 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
     await createOrUpdateSaveSlot(newPlayer);
   }, [activeSlotId]);
 
-  const setGameSettings = (settings: Partial<typeof gameSettings>) => {
-    setGameSettingsState(prev => ({...prev, ...settings}));
-  }
+  const setGameSettings = (settings: Partial<GameState['gameSettings']>) => {
+    setGameSettingsState(prev => ({ ...prev, ...settings }));
+  };
 
   const value = {
     currentPage,
     setPage,
     activeSlotId,
     setActiveSlotId,
-    currentPlayer: currentPlayer ?? null,
+    currentPlayer,
     updatePlayerName,
     gameSettings,
     setGameSettings,
