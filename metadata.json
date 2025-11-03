@@ -1,0 +1,5 @@
+{
+  "name": "TerraQuest – Exploradores del Mundo",
+  "description": "An offline-first PWA for kids aged 8-11. It includes an interactive SVG map and the GeoMatch minigame (country-capital-flag), with local progress tracking via IndexedDB.",
+  "requestFramePermissions": []
+}

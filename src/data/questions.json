@@ -1,0 +1,132 @@
+[
+  {
+    "id": "q_geo_001", "category": "GEOGRAFIA", "type": "GEO_CAPITAL", "difficulty": 1, "regionId": "europe",
+    "prompt": "¿Cuál es la capital de Francia?",
+    "options": ["París", "Lyon", "Marsella"], "answer": "París", "extra": "París es famosa por la Torre Eiffel."
+  },
+  {
+    "id": "q_geo_002", "category": "GEOGRAFIA", "type": "GEO_BANDERA", "difficulty": 1, "regionId": "americas_north",
+    "prompt": "Elige la bandera de Canadá",
+    "options": ["canada", "mexico", "usa"], "answer": "canada", "extra": "La hoja de arce es un símbolo nacional de Canadá."
+  },
+  {
+    "id": "q_geo_003", "category": "GEOGRAFIA", "type": "GEO_REGION", "difficulty": 2, "regionId": "asia",
+    "prompt": "Soy el río más largo de Asia y paso por China. ¿Quién soy?",
+    "options": ["Yangtsé", "Ganges", "Mekong"], "answer": "Yangtsé", "extra": "La presa de las Tres Gargantas, en el río Yangtsé, es la más grande del mundo."
+  },
+  {
+    "id": "q_paleo_001", "category": "PALEONTOLOGIA", "type": "PALEO_ERA", "difficulty": 2, "regionId": "americas_north",
+    "prompt": "El Tiranosaurio Rex vivió en el período...",
+    "options": ["Cretácico", "Jurásico", "Triásico"], "answer": "Cretácico", "extra": "¡El T. rex vivió más cerca de nosotros en el tiempo que de los estegosaurios!"
+  },
+  {
+    "id": "q_geo_004", "category": "GEOGRAFIA", "type": "GEO_CAPITAL", "difficulty": 1, "regionId": "asia",
+    "prompt": "¿Cuál es la capital de Japón?",
+    "options": ["Tokio", "Kioto", "Osaka"], "answer": "Tokio", "extra": "Tokio es la ciudad más poblada del mundo."
+  },
+  {
+    "id": "q_geo_005", "category": "GEOGRAFIA", "type": "GEO_CAPITAL", "difficulty": 1, "regionId": "americas_south",
+    "prompt": "¿Cuál es la capital de Argentina?",
+    "options": ["Buenos Aires", "Córdoba", "Rosario"], "answer": "Buenos Aires", "extra": "El tango es un baile famoso que nació en Buenos Aires."
+  },
+  {
+    "id": "q_geo_006", "category": "GEOGRAFIA", "type": "GEO_REGION", "difficulty": 2, "regionId": "africa",
+    "prompt": "¿En qué continente se encuentra el desierto del Sahara?",
+    "options": ["África", "Asia", "Australia"], "answer": "África", "extra": "El Sahara es el desierto cálido más grande del mundo."
+  },
+  {
+    "id": "q_hist_001", "category": "HISTORIA", "type": "ARQ_SITIO", "difficulty": 2, "regionId": "africa",
+    "prompt": "¿Qué antigua civilización construyó las pirámides de Giza?",
+    "options": ["Egipcia", "Romana", "Griega"], "answer": "Egipcia", "extra": "Las pirámides eran tumbas para los faraones."
+  },
+  {
+    "id": "q_hist_002", "category": "HISTORIA", "type": "ARQ_SITIO", "difficulty": 3, "regionId": "americas_south",
+    "prompt": "Machu Picchu es una famosa ciudadela del imperio...",
+    "options": ["Inca", "Azteca", "Maya"], "answer": "Inca", "extra": "Estuvo oculta en las montañas de Perú durante siglos."
+  },
+  {
+    "id": "q_geo_007", "category": "GEOGRAFIA", "type": "GEO_REGION", "difficulty": 3, "regionId": "oceania",
+    "prompt": "La Gran Barrera de Coral está cerca de la costa de...",
+    "options": ["Australia", "Nueva Zelanda", "Indonesia"], "answer": "Australia", "extra": "¡Es tan grande que se puede ver desde el espacio!"
+  },
+  {
+    "id": "q_geo_008", "category": "GEOGRAFIA", "type": "GEO_BANDERA", "difficulty": 2, "regionId": "africa",
+    "prompt": "Esta es la bandera de...",
+    "options": ["south_africa", "egypt", "brazil"], "answer": "south_africa", "extra": "Se la conoce como la 'bandera del arcoíris' por sus muchos colores."
+  },
+  {
+    "id": "q_geo_009", "category": "GEOGRAFIA", "type": "GEO_CAPITAL", "difficulty": 2, "regionId": "europe",
+    "prompt": "¿Cuál es la capital de Italia?",
+    "options": ["Roma", "Milán", "Nápoles"], "answer": "Roma", "extra": "Dentro de Roma se encuentra la Ciudad del Vaticano, el país más pequeño del mundo."
+  },
+  {
+    "id": "q_paleo_002", "category": "PALEONTOLOGIA", "type": "PALEO_ERA", "difficulty": 3, "regionId": "americas_south",
+    "prompt": "El Argentinosaurus, uno de los dinosaurios más grandes, fue encontrado en...",
+    "options": ["Sudamérica", "Norteamérica", "África"], "answer": "Sudamérica", "extra": "¡Se cree que pesaba tanto como 10 elefantes!"
+  },
+  {
+    "id": "q_arq_001", "category": "ARQUEOLOGIA", "type": "ARQ_SITIO", "difficulty": 2, "regionId": "europe",
+    "prompt": "¿En qué país se encuentra el famoso monumento de Stonehenge?",
+    "options": ["Reino Unido", "Francia", "Irlanda"], "answer": "Reino Unido", "extra": "Nadie sabe con seguridad cómo movieron esas piedras gigantes hace miles de años."
+  },
+  {
+    "id": "q_geo_010", "category": "GEOGRAFIA", "type": "GEO_CAPITAL", "difficulty": 2, "regionId": "americas_north",
+    "prompt": "¿Cuál es la capital de México?",
+    "options": ["Ciudad de México", "Guadalajara", "Cancún"], "answer": "Ciudad de México", "extra": "Fue construida sobre un lago por los antiguos aztecas."
+  },
+  {
+    "id": "q_geo_011", "category": "GEOGRAFIA", "type": "GEO_BANDERA", "difficulty": 2, "regionId": "asia",
+    "prompt": "Esta bandera con un círculo rojo en el centro pertenece a...",
+    "options": ["japan", "china", "india"], "answer": "japan", "extra": "El círculo rojo representa el sol naciente."
+  },
+  {
+    "id": "q_geo_012", "category": "GEOGRAFIA", "type": "GEO_REGION", "difficulty": 2, "regionId": "americas_south",
+    "prompt": "El río Amazonas, el más caudaloso del mundo, fluye principalmente por...",
+    "options": ["Brasil", "Argentina", "Colombia"], "answer": "Brasil", "extra": "La selva amazónica produce el 20% del oxígeno del mundo."
+  },
+  {
+    "id": "q_hist_003", "category": "HISTORIA", "type": "ARQ_SITIO", "difficulty": 3, "regionId": "asia",
+    "prompt": "¿Para qué emperador se construyó el ejército de terracota en China?",
+    "options": ["Qin Shi Huang", "Genghis Khan", "Kublai Khan"], "answer": "Qin Shi Huang", "extra": "¡Cada soldado de terracota tiene una cara única!"
+  },
+  {
+    "id": "q_geo_013", "category": "GEOGRAFIA", "type": "GEO_CAPITAL", "difficulty": 3, "regionId": "oceania",
+    "prompt": "La capital de Australia es...",
+    "options": ["Canberra", "Sídney", "Melbourne"], "answer": "Canberra", "extra": "Mucha gente piensa que es Sídney, ¡pero es una respuesta trampa!"
+  },
+  {
+    "id": "q_geo_014", "category": "GEOGRAFIA", "type": "GEO_CAPITAL", "difficulty": 2, "regionId": "africa",
+    "prompt": "¿Cuál es la capital de Egipto?",
+    "options": ["El Cairo", "Alejandría", "Lúxor"], "answer": "El Cairo", "extra": "El Cairo está muy cerca de las famosas pirámides de Giza."
+  },
+  {
+    "id": "q_ciencia_001", "category": "CIENCIA", "type": "GEO_REGION", "difficulty": 2, "regionId": "antarctica",
+    "prompt": "¿Cuál es el continente más frío y seco de la Tierra?",
+    "options": ["Antártida", "Ártico", "Asia"], "answer": "Antártida", "extra": "¡La Antártida es un desierto helado!"
+  },
+  {
+    "id": "q_geo_015", "category": "GEOGRAFIA", "type": "GEO_CAPITAL", "difficulty": 2, "regionId": "europe",
+    "prompt": "Capital de España:",
+    "options": ["Madrid", "Barcelona", "Sevilla"], "answer": "Madrid"
+  },
+  {
+    "id": "q_geo_016", "category": "GEOGRAFIA", "type": "GEO_CAPITAL", "difficulty": 2, "regionId": "europe",
+    "prompt": "Capital de Alemania:",
+    "options": ["Berlín", "Múnich", "Hamburgo"], "answer": "Berlín", "extra": "Una vez, un gran muro dividió la ciudad de Berlín en dos."
+  },
+  {
+    "id": "q_geo_017", "category": "GEOGRAFIA", "type": "GEO_BANDERA", "difficulty": 3, "regionId": "americas_south",
+    "prompt": "Elige la bandera de Brasil.",
+    "options": ["brazil", "argentina", "mexico"], "answer": "brazil", "extra": "El lema en la bandera dice 'Ordem e Progresso' (Orden y Progreso)."
+  },
+  {
+    "id": "q_geo_018", "category": "GEOGRAFIA", "type": "GEO_REGION", "difficulty": 3, "regionId": "asia",
+    "prompt": "El Monte Everest, la montaña más alta del mundo, está en la cordillera del...",
+    "options": ["Himalaya", "Andes", "Alpes"], "answer": "Himalaya"
+  },
+  {
+    "id": "q_hist_004", "category": "HISTORIA", "type": "ARQ_SITIO", "difficulty": 2, "regionId": "europe",
+    "prompt": "El Coliseo, un famoso anfiteatro, se encuentra en...",
+    "options": ["Roma", "Atenas", "París"], "answer": "Roma", "extra": "Los gladiadores luchaban entre sí y contra animales salvajes en el Coliseo."
+  }
+]
