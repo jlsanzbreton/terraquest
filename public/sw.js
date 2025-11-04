@@ -1,4 +1,6 @@
+"use strict";
 /// <reference lib="WebWorker" />
+const sw = self;
 const CACHE_NAME = 'terraquest-app-shell-v1';
 const APP_SHELL = [
     '/',
@@ -9,21 +11,21 @@ const APP_SHELL = [
     '/icons/icon-192.png',
     '/icons/icon-512.png'
 ];
-self.addEventListener('install', (event) => {
-    event.waitUntil(caches
+sw.addEventListener('install', (event) => {
+    event.waitUntil(sw.caches
         .open(CACHE_NAME)
         .then((cache) => cache.addAll(APP_SHELL))
-        .then(() => self.skipWaiting()));
+        .then(() => sw.skipWaiting()));
 });
-self.addEventListener('activate', (event) => {
-    event.waitUntil(caches
+sw.addEventListener('activate', (event) => {
+    event.waitUntil(sw.caches
         .keys()
         .then((cacheNames) => Promise.all(cacheNames
         .filter((cacheName) => cacheName !== CACHE_NAME)
-        .map((cacheName) => caches.delete(cacheName))))
-        .then(() => self.clients.claim()));
+        .map((cacheName) => sw.caches.delete(cacheName))))
+        .then(() => sw.clients.claim()));
 });
-self.addEventListener('fetch', (event) => {
+sw.addEventListener('fetch', (event) => {
     const request = event.request;
     if (request.method !== 'GET') {
         return;
@@ -35,19 +37,19 @@ self.addEventListener('fetch', (event) => {
     }
     if (request.mode === 'navigate') {
         event.respondWith((async () => {
-            const cached = await caches.match('/index.html');
+            const cached = await sw.caches.match('/index.html');
             if (cached) {
                 return cached;
             }
             const response = await fetch(request);
             const copy = response.clone();
-            caches.open(CACHE_NAME).then((cache) => cache.put('/index.html', copy));
+            sw.caches.open(CACHE_NAME).then((cache) => cache.put('/index.html', copy));
             return response;
         })());
         return;
     }
     event.respondWith((async () => {
-        const cache = await caches.open(CACHE_NAME);
+        const cache = await sw.caches.open(CACHE_NAME);
         const cachedResponse = await cache.match(request);
         if (cachedResponse) {
             return cachedResponse;
@@ -68,4 +70,3 @@ self.addEventListener('fetch', (event) => {
         }
     })());
 });
-export {};

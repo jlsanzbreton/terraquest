@@ -1,0 +1,27 @@
+{
+	"name": "TerraQuest – Exploradores del Mundo",
+	"short_name": "TerraQuest",
+	"description": "Juegos educativos offline para explorar geografía, historia y ciencia.",
+	"lang": "es-ES",
+	"start_url": "/",
+	"scope": "/",
+	"display": "standalone",
+	"orientation": "any",
+	"theme_color": "#0ea5e9",
+	"background_color": "#f1f5f9",
+	"categories": ["education", "games"],
+	"icons": [
+		{
+			"src": "/icons/icon-192.png",
+			"sizes": "192x192",
+			"type": "image/png",
+			"purpose": "any"
+		},
+		{
+			"src": "/icons/icon-512.png",
+			"sizes": "512x512",
+			"type": "image/png",
+			"purpose": "any"
+		}
+	]
+}

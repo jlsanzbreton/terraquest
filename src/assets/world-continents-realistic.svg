@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 520" width="1000" height="520">
+  <title>Continents (Simplified, Interactive)</title>
+  <desc>Simplified but more realistic continent silhouettes with IDs and ARIA labels for interactive use.</desc>
+  <defs>
+    <style>
+      .continent { fill: #cfe8ff; stroke: #1f2937; stroke-width: 1.5; }
+      .continent:hover, .continent:focus { fill: #93c5fd; outline: none; }
+      .grid { stroke: #e5e7eb; stroke-width: 0.5; }
+    </style>
+  </defs>
+
+  <!-- Graticule (simple lat/lon) -->
+  <g id="graticule" aria-hidden="true">
+    <!-- vertical lines every 100 units -->
+    <path class="grid" d="M100 20 V500 M200 20 V500 M300 20 V500 M400 20 V500 M500 20 V500 M600 20 V500 M700 20 V500 M800 20 V500 M900 20 V500"/>
+    <!-- horizontal lines every 100 units -->
+    <path class="grid" d="M20 100 H980 M20 200 H980 M20 300 H980 M20 400 H980"/>
+    <rect x="20" y="20" width="960" height="480" fill="none" class="grid"/>
+  </g>
+
+  <!-- Continents (very simplified silhouettes) -->
+  <!-- North America -->
+  <path id="north_america" class="continent" role="button" tabindex="0" aria-label="Norteamérica"
+        d="M140,120
+           C120,110 120,90 150,80
+           C220,55 290,60 330,90
+           C350,105 355,125 360,145
+           C370,190 350,210 320,225
+           C290,240 260,245 230,260
+           C210,270 205,290 220,305
+           C240,325 275,330 305,340
+           C320,345 330,355 320,365
+           C300,385 260,380 235,370
+           C200,355 160,330 145,300
+           C120,255 115,210 130,170
+           C135,155 140,135 140,120 Z"/>
+
+  <!-- South America -->
+  <path id="south_america" class="continent" role="button" tabindex="0" aria-label="Sudamérica"
+        d="M330,255
+           C360,260 380,275 390,300
+           C400,330 390,355 375,375
+           C360,395 350,415 360,435
+           C370,455 370,475 360,490
+           C345,510 320,495 315,475
+           C305,435 300,400 305,370
+           C310,340 300,315 285,295
+           C275,280 285,265 300,260
+           C310,257 320,255 330,255 Z"/>
+
+  <!-- Europe -->
+  <path id="europe" class="continent" role="button" tabindex="0" aria-label="Europa"
+        d="M500,120
+           C520,110 560,110 590,120
+           C610,125 625,140 630,155
+           C635,170 625,185 610,190
+           C590,198 570,195 545,195
+           C530,195 515,205 505,200
+           C490,193 485,178 488,165
+           C490,150 490,130 500,120 Z"/>
+
+  <!-- Africa -->
+  <path id="africa" class="continent" role="button" tabindex="0" aria-label="África"
+        d="M540,205
+           C560,205 590,210 610,225
+           C640,245 655,275 650,305
+           C645,335 630,355 615,375
+           C600,395 595,420 600,445
+           C603,460 595,470 585,480
+           C575,490 560,495 548,488
+           C535,480 530,465 528,450
+           C526,430 520,410 505,395
+           C488,378 475,360 470,340
+           C462,310 470,280 490,255
+           C505,235 520,220 540,205 Z"/>
+
+  <!-- Asia (very simplified, joined with Europe loosely) -->
+  <path id="asia" class="continent" role="button" tabindex="0" aria-label="Asia"
+        d="M610,125
+           C650,110 700,110 740,125
+           C780,140 810,165 830,190
+           C850,215 860,245 850,270
+           C840,295 810,305 785,305
+           C760,305 740,300 725,295
+           C700,287 680,285 660,290
+           C640,295 620,290 610,275
+           C600,260 598,240 605,225
+           C610,210 602,195 598,185
+           C592,170 595,140 610,125 Z"/>
+
+  <!-- Oceania (Australia + islands blob) -->
+  <path id="oceania" class="continent" role="button" tabindex="0" aria-label="Oceanía"
+        d="M820,360
+           C840,350 865,350 885,360
+           C905,370 915,390 905,405
+           C895,420 870,425 850,420
+           C830,415 815,405 810,390
+           C805,375 810,365 820,360 Z
+           M905,430
+           C910,428 918,430 922,435
+           C926,440 925,447 920,450
+           C915,453 908,452 905,447
+           C902,442 902,433 905,430 Z"/>
+
+  <!-- Antarctica -->
+  <path id="antarctica" class="continent" role="button" tabindex="0" aria-label="Antártida"
+        d="M180,470
+           C260,455 350,455 430,465
+           C520,475 610,480 700,475
+           C780,470 850,465 900,470
+           C910,471 918,478 918,485
+           C918,493 910,498 900,498
+           L100,498
+           C90,498 82,492 82,485
+           C82,478 90,472 100,471
+           C125,469 155,473 180,470 Z"/>
+</svg>

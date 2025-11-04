@@ -1,0 +1,518 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1400 800" width="1400" height="800">
+  <title>TerraQuest - Mapa Mundial Interactivo (Mercator)</title>
+  <desc>Mapa educativo con batimetría, orografía y continentes interactivos para niños 8-11 años</desc>
+  
+  <defs>
+    <style>
+      /* Estilos base */
+      .ocean-deep { fill: #003366; }
+      .ocean-mid { fill: #004c7f; }
+      .ocean-shallow { fill: #0066aa; }
+      .ocean-coast { fill: #4d94cc; }
+      
+      .land-low { fill: #90c090; }
+      .land-mid { fill: #c4b87e; }
+      .land-high { fill: #9d876e; }
+      .land-mountain { fill: #e8e8e8; }
+      
+      .graticule { stroke: #cbd5e1; stroke-width: 0.5; fill: none; opacity: 0.4; }
+      .border { stroke: #1f2937; stroke-width: 1.5; fill: none; }
+      
+      .continent { 
+        cursor: pointer;
+        transition: all 0.2s ease;
+      }
+      
+      .continent:hover, .continent:focus { 
+        filter: brightness(1.2) drop-shadow(0 0 8px rgba(14, 165, 233, 0.6));
+        outline: none;
+      }
+      
+      .continent:focus-visible {
+        outline: 3px solid #0ea5e9;
+        outline-offset: 2px;
+      }
+      
+      /* Toggle de capas */
+      #bathymetry, #orography, #labels, #features {
+        transition: opacity 0.3s ease;
+      }
+
+      /* Clases para ocultar capas (controladas por JS) */
+      .hide-bathymetry #bathymetry,
+      .hide-orography #continents.layer-orography, /* Afecta al grupo de continentes */
+      .hide-labels #labels,
+      .hide-features #features {
+        opacity: 0;
+        pointer-events: none;
+      }
+
+      /* Ocultar solo el relieve, no el borde del continente */
+      .hide-orography .land-low,
+      .hide-orography .land-mid,
+      .hide-orography .land-high,
+      .hide-orography .land-mountain {
+        opacity: 0;
+      }
+      /* Pero mantenemos la base y el borde */
+      .hide-orography .continent {
+         filter: none; /* Quitar hover/focus si está oculto */
+      }
+      
+      .label { 
+        font-family: system-ui, -apple-system, sans-serif;
+        font-size: 14px;
+        font-weight: 600;
+        fill: #1f2937;
+        pointer-events: none;
+        text-anchor: middle;
+      }
+
+      /* Estilos de la interfaz (botones, leyenda) */
+      .ui-text {
+        font-family: system-ui, -apple-system, sans-serif;
+        font-size: 12px;
+        font-weight: 600;
+        fill: #e0f2fe;
+        text-anchor: start;
+      }
+      .ui-title {
+        font-size: 13px;
+        font-weight: 700;
+        fill: #f1f5f9;
+        text-anchor: middle;
+      }
+      
+      .toggle-button { cursor: pointer; }
+      .toggle-button rect {
+        fill: #374151;
+        stroke: #60a5fa;
+        stroke-width: 2;
+        transition: fill 0.2s;
+      }
+      .toggle-button:hover rect {
+        fill: #4b5563; /* Movido de JS a CSS */
+      }
+      .toggle-button circle {
+        transition: fill 0.2s;
+      }
+      .toggle-button.is-active circle {
+        fill: #0ea5e9;
+      }
+      .toggle-button:not(.is-active) circle {
+        fill: #4b5563;
+      }
+      .toggle-button:not(.is-active) .ui-text {
+        fill: #9ca3af;
+      }
+
+    </style>
+    
+    <linearGradient id="oceanDepth" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#001a33"/>
+      <stop offset="40%" stop-color="#003366"/>
+      <stop offset="70%" stop-color="#004c7f"/>
+      <stop offset="100%" stop-color="#4d94cc"/>
+    </linearGradient>
+    
+    <linearGradient id="landHeight" x1="0%" y1="100%" x2="0%" y2="0%">
+      <stop offset="0%" stop-color="#5a8a5a"/>
+      <stop offset="30%" stop-color="#90c090"/>
+      <stop offset="60%" stop-color="#c4b87e"/>
+      <stop offset="85%" stop-color="#8b7355"/>
+      <stop offset="100%" stop-color="#f0f0f0"/>
+    </linearGradient>
+  </defs>
+  
+  <g id="bathymetry">
+    <rect width="1400" height="800" fill="url(#oceanDepth)"/>
+    
+    <ellipse cx="1100" cy="250" rx="80" ry="120" class="ocean-deep" opacity="0.3"/>
+    <ellipse cx="200" cy="580" rx="60" ry="90" class="ocean-deep" opacity="0.3"/>
+    <ellipse cx="350" cy="320" rx="100" ry="60" class="ocean-mid" opacity="0.2"/>
+  </g>
+  
+  <g id="graticule" aria-hidden="true">
+    <line x1="0" y1="133" x2="1400" y2="133" class="graticule"/>
+    <line x1="0" y1="267" x2="1400" y2="267" class="graticule"/>
+    <line x1="0" y1="400" x2="1400" y2="400" class="graticule"/>
+    <line x1="0" y1="533" x2="1400" y2="533" class="graticule"/>
+    <line x1="0" y1="667" x2="1400" y2="667" class="graticule"/>
+    
+    <line x1="233" y1="0" x2="233" y2="800" class="graticule"/>
+    <line x1="467" y1="0" x2="467" y2="800" class="graticule"/>
+    <line x1="700" y1="0" x2="700" y2="800" class="graticule"/>
+    <line x1="933" y1="0" x2="933" y2="800" class="graticule"/>
+    <line x1="1167" y1="0" x2="1167" y2="800" class="graticule"/>
+  </g>
+  
+  <g id="continents" class="layer-orography">
+    
+    <g id="north_america" class="continent" role="button" tabindex="0" 
+       aria-label="Norteamérica: Canadá, Estados Unidos, México y América Central">
+      
+      <path class="land-low" d="M150,180 L180,160 L220,155 L260,165 L290,180 L310,200 L320,230 L330,260 L325,290 L310,310 L285,320 L260,325 L240,335 L225,350 L220,370 L230,390 L250,400 L275,405 L295,415 L305,435 L300,455 L280,465 L260,460 L240,450 L220,435 L205,415 L195,390 L185,365 L175,335 L165,305 L155,270 L150,235 Z"/>
+      
+      <path class="land-mid" d="M200,170 L240,168 L275,175 L300,190 L315,210 L320,235 L315,260 L300,275 L280,285 L260,290 L245,300 L235,315 L230,335 L235,355 L250,370 L270,380 L285,390 L290,410 L285,430 L270,440 L250,435 L235,420 L225,400 L220,380 L215,360 L210,340 L205,315 L200,290 L195,265 L192,235 L195,205 Z"/>
+      
+      <path class="land-high" d="M210,200 L230,195 L245,198 L255,210 L260,230 L262,250 L258,270 L250,285 L240,295 L235,310 L238,330 L248,345 L260,355 L268,370 L270,390 L265,405 L255,410 L245,405 L238,390 L235,370 L232,350 L228,330 L225,310 L222,290 L220,270 L218,250 L216,230 L215,215 Z"/>
+      
+      <ellipse cx="245" cy="240" rx="8" ry="25" class="land-mountain"/>
+      <ellipse cx="252" cy="320" rx="6" ry="18" class="land-mountain"/>
+      
+      <path class="land-low" d="M320,390 L325,410 L328,430 L325,450 L318,465 L310,470 L305,465 L303,450 L305,430 L310,410 L315,395 Z"/>
+      
+      <path class="land-mid" d="M170,380 L175,400 L178,425 L175,445 L170,460 L165,465 L162,455 L163,435 L165,415 L168,395 Z"/>
+      
+      <path class="border" d="M150,180 C140,170 135,155 145,145 C160,130 180,135 200,140 C230,148 260,160 285,175 C310,190 330,210 340,235 C350,260 355,290 350,320 C345,350 330,375 310,395 C295,410 280,420 265,430 C250,440 240,455 235,475 L240,495 C248,510 265,518 280,520 C295,522 310,518 320,508 L335,490 C345,475 350,455 348,435 C346,415 338,395 325,380 L310,365 L295,355 L280,350 L265,350 L250,355 L235,365 L220,375 L205,380 L190,380 L175,375 L165,365 L158,350 L155,330 L155,310 L158,290 L163,270 L168,250 L172,230 L175,210 L177,190 L178,175 Z"/>
+    </g>
+    
+    <g id="south_america" class="continent" role="button" tabindex="0"
+       aria-label="Sudamérica: Brasil, Argentina, Perú, Colombia y más">
+      
+      <path class="land-low" d="M320,480 L350,485 L380,495 L400,510 L410,530 L415,555 L410,580 L400,600 L385,615 L370,620 L355,615 L340,605 L328,590 L322,570 L320,550 L318,530 L318,510 Z"/>
+      
+      <path class="land-mid" d="M340,500 L365,505 L385,515 L395,530 L398,550 L395,570 L388,590 L375,605 L360,610 L348,605 L340,590 L336,570 L335,550 L337,530 L339,515 Z"/>
+      
+      <path class="land-high" d="M300,495 L310,510 L315,530 L318,555 L320,580 L322,610 L324,640 L325,670 L323,695 L318,710 L310,720 L302,718 L296,705 L293,685 L292,660 L293,635 L295,610 L297,585 L299,560 L300,535 L300,515 Z"/>
+      
+      <ellipse cx="308" cy="540" rx="4" ry="20" class="land-mountain"/>
+      <ellipse cx="310" cy="610" rx="4" ry="25" class="land-mountain"/>
+      <ellipse cx="312" cy="680" rx="3" ry="15" class="land-mountain"/>
+      
+      <path class="land-mid" d="M310,710 L318,720 L322,735 L320,750 L312,760 L302,762 L295,755 L292,740 L295,725 L302,715 Z"/>
+      
+      <path class="border" d="M320,480 C345,483 370,490 390,505 C410,520 425,545 425,570 C425,595 418,620 405,640 C392,660 375,675 358,688 C345,698 332,710 322,725 C312,740 308,760 310,778 L315,790 C320,798 328,800 335,798 L345,792 C355,784 362,772 365,758 C368,744 368,730 365,716 L358,695 L348,675 L338,658 L328,643 L320,628 L313,613 L308,598 L305,583 L303,568 L303,553 L305,538 L308,523 L312,508 L316,495 Z"/>
+css-selector
+    </g>
+    
+    <g id="europe" class="continent" role="button" tabindex="0"
+       aria-label="Europa: España, Francia, Alemania, Italia y más países">
+      
+      <path class="land-low" d="M680,220 L720,215 L755,218 L785,225 L810,235 L825,248 L830,265 L825,282 L810,295 L790,302 L765,305 L740,305 L715,300 L695,290 L682,275 L678,255 L680,235 Z"/>
+      
+      <path class="land-mid" d="M695,235 L725,230 L750,233 L770,240 L785,250 L792,265 L790,280 L778,290 L760,295 L740,295 L720,290 L705,280 L697,265 L695,250 Z"/>
+      
+      <path class="land-high" d="M680,270 L695,268 L710,270 L722,275 L732,283 L738,295 L735,308 L725,315 L710,318 L695,315 L685,308 L680,295 L679,283 Z"/>
+      
+      <ellipse cx="712" cy="290" rx="15" ry="8" class="land-mountain"/>
+      <ellipse cx="685" cy="278" rx="8" ry="5" class="land-mountain"/>
+      
+      <path class="land-mid" d="M640,285 L655,283 L668,287 L675,295 L677,308 L672,320 L662,325 L648,323 L638,315 L635,303 L637,293 Z"/>
+      
+      <path class="land-mid" d="M720,305 L725,318 L728,335 L728,352 L724,368 L717,378 L710,380 L705,372 L703,358 L704,342 L707,328 L712,316 Z"/>
+      
+      <path class="land-mid" d="M750,310 L762,315 L770,325 L773,340 L770,355 L762,365 L750,368 L742,360 L740,345 L743,330 L747,320 Z"/>
+      
+      <path class="land-mid" d="M730,140 L745,135 L758,138 L768,148 L773,163 L772,180 L765,195 L753,205 L740,208 L730,203 L724,190 L722,175 L725,160 L728,150 Z"/>
+      
+      <path class="border" d="M640,285 C655,280 670,278 685,280 C705,283 725,287 743,295 C762,303 780,315 795,330 C808,343 815,360 815,378 L810,395 C805,408 795,418 783,425 L765,430 L745,428 L725,420 L708,408 L693,393 L680,375 L670,355 L663,333 L660,310 L660,290 Z"/>
+    </g>
+    
+    <g id="africa" class="continent" role="button" tabindex="0"
+       aria-label="África: Egipto, Kenia, Sudáfrica, Marruecos y más">
+      
+      <path class="land-low" d="M680,330 L740,325 L795,330 L840,340 L875,355 L895,375 L905,400 L905,425 L895,450 L875,470 L850,485 L820,495 L785,500 L750,500 L715,495 L685,485 L665,470 L650,450 L643,425 L642,400 L645,375 L655,355 L670,340 Z"/>
+      
+      <path class="land-mid" d="M700,380 L750,375 L795,380 L830,390 L855,405 L870,425 L875,450 L870,475 L855,495 L830,508 L800,515 L765,518 L730,515 L700,508 L675,495 L658,475 L650,450 L648,425 L653,400 L665,385 L682,378 Z"/>
+      
+      <path class="land-high" d="M830,410 L848,415 L862,425 L870,440 L872,458 L868,475 L858,488 L845,495 L832,495 L822,485 L818,470 L818,453 L822,437 L827,423 Z"/>
+      
+      <path class="land-high" d="M660,335 L680,333 L695,337 L705,345 L708,358 L703,370 L693,375 L680,373 L670,365 L665,353 L663,343 Z"/>
+      
+      <ellipse cx="845" cy="460" rx="5" ry="8" class="land-mountain"/>
+      
+      <path class="land-low" d="M740,480 L775,478 L805,483 L825,495 L835,512 L835,530 L828,545 L813,555 L793,560 L770,560 L748,555 L730,545 L720,530 L718,512 L722,495 Z"/>
+      
+      <path class="land-mid" d="M745,560 L775,558 L800,563 L818,573 L828,590 L830,610 L823,628 L808,640 L788,645 L765,643 L745,635 L732,620 L726,603 L728,585 L735,570 Z"/>
+      
+      <path class="land-mid" d="M870,540 L880,545 L888,558 L892,578 L890,598 L883,615 L872,625 L862,628 L855,620 L852,603 L853,583 L858,563 L865,548 Z"/>
+      
+      <path class="land-low" d="M865,425 L880,428 L892,435 L898,448 L895,462 L885,470 L873,468 L865,458 L863,443 L864,433 Z"/>
+      
+      <path class="border" d="M680,330 C720,323 760,322 800,328 C840,334 880,348 910,370 C930,388 942,413 945,440 C948,467 943,495 930,520 C917,545 897,565 873,580 C848,595 820,605 790,612 C760,619 730,622 700,620 C670,618 642,610 620,595 C598,580 582,558 573,533 C564,508 562,480 567,453 C572,426 584,400 602,378 C620,356 643,340 668,332 Z"/>
+    </g>
+    
+    <g id="asia" class="continent" role="button" tabindex="0"
+       aria-label="Asia: China, India, Rusia, Japón y más">
+      
+      <path class="land-low" d="M830,150 L900,145 L970,150 L1035,160 L1090,175 L1130,195 L1155,220 L1165,250 L1160,280 L1140,305 L1110,320 L1070,328 L1030,330 L990,325 L955,315 L925,300 L900,280 L882,255 L872,225 L870,195 L875,175 Z"/>
+      
+      <path class="land-mid" d="M920,180 L970,175 L1015,182 L1055,195 L1085,213 L1105,235 L1115,260 L1115,285 L1105,308 L1085,323 L1055,333 L1020,335 L985,330 L955,320 L930,305 L915,285 L907,260 L905,235 L910,210 L917,193 Z"/>
+      
+      <path class="land-high" d="M950,310 L985,308 L1015,312 L1040,322 L1058,338 L1068,358 L1070,380 L1063,400 L1048,413 L1028,420 L1005,420 L982,413 L965,400 L955,383 L950,363 L950,343 L952,328 Z"/>
+      
+      <ellipse cx="1010" cy="360" rx="30" ry="12" class="land-mountain"/>
+      <circle cx="1020" cy="362" r="4" class="land-mountain" opacity="0.9"/>
+      
+      <path class="land-high" d="M820,180 L828,200 L832,225 L830,250 L824,270 L816,283 L808,288 L802,280 L800,263 L802,243 L806,223 L812,203 L818,188 Z"/>
+      
+      <path class="land-mid" d="M920,390 L945,388 L967,393 L982,405 L990,423 L990,443 L983,463 L970,478 L952,485 L933,483 L918,473 L910,458 L908,440 L912,420 L918,403 Z"/>
+      
+      <path class="land-low" d="M1050,330 L1090,328 L1125,335 L1150,350 L1165,372 L1170,398 L1165,423 L1150,443 L1128,455 L1102,460 L1075,458 L1052,448 L1038,433 L1032,413 L1033,393 L1038,373 L1045,353 Z"/>
+g
+      
+      <path class="land-low" d="M820,360 L840,358 L858,363 L870,373 L878,388 L880,408 L875,428 L863,443 L847,450 L830,448 L818,438 L812,423 L810,408 L813,390 L817,375 Z"/>
+      
+      <path class="land-mid" d="M1080,430 L1095,433 L1108,443 L1115,458 L1118,478 L1115,498 L1105,515 L1092,525 L1078,528 L1068,520 L1063,505 L1063,488 L1067,470 L1073,453 L1078,440 Z"/>
+      
+      <path class="land-mid" d="M1160,310 L1170,315 L1178,328 L1180,345 L1175,360 L1165,368 L1156,365 L1152,353 L1152,338 L1155,323 Z"/>
+      
+      <path class="land-mid" d="M1210,300 L1222,305 L1230,318 L1232,338 L1228,358 L1218,372 L1205,378 L1195,373 L1190,358 L1192,340 L1198,323 L1205,310 Z"/>
+      
+      <path class="land-mid" d="M1180,220 L1190,223 L1198,235 L1200,252 L1195,268 L1185,278 L1176,278 L1170,268 L1170,250 L1174,235 Z"/>
+      
+      <path class="land-mid" d="M1250,160 L1262,165 L1270,180 L1272,200 L1265,218 L1252,228 L1242,225 L1237,210 L1240,192 L1246,175 Z"/>
+      
+      <path class="border" d="M820,150 C880,140 940,138 1000,145 C1060,152 1120,168 1170,195 C1220,222 1260,260 1285,305 C1305,345 1315,390 1310,435 C1305,480 1285,520 1255,555 L1220,585 C1185,610 1145,628 1102,638 C1060,648 1015,650 972,645 C930,640 890,628 855,610 C820,592 790,568 768,538 C745,508 730,473 722,435 C715,398 715,360 722,323 C730,285 745,250 767,220 C790,190 818,165 850,150 Z"/>
+    </g>
+    
+    <g id="oceania" class="continent" role="button" tabindex="0"
+       aria-label="Oceanía: Australia, Nueva Zelanda y las islas del Pacífico">
+      
+      <path class="land-low" d="M1050,550 L1120,545 L1185,550 L1240,565 L1280,590 L1305,620 L1315,655 L1310,690 L1290,715 L1260,730 L1220,735 L1180,730 L1140,715 L1105,690 L1080,660 L1065,625 L1058,590 L1055,570 Z"/>
+      
+      <path class="land-mid" d="M1250,570 L1275,575 L1295,590 L1305,610 L1310,635 L1308,660 L1300,685 L1285,705 L1265,715 L1248,713 L1238,700 L1235,680 L1237,655 L1242,630 L1247,605 L1250,585 Z"/>
+      
+      <ellipse cx="1265" cy="650" rx="8" ry="20" class="land-high"/>
+      
+      <path class="land-mid" d="M1250,740 L1262,743 L1272,753 L1275,768 L1268,780 L1255,783 L1245,778 L1242,765 L1245,752 Z"/>
+      
+      <path class="land-mid" d="M1350,710 L1360,715 L1368,728 L1370,745 L1365,760 L1355,768 L1346,765 L1342,752 L1344,735 L1348,720 Z"/>
+      
+      <path class="land-high" d="M1345,775 L1358,780 L1368,793 L1372,813 L1368,833 L1358,848 L1345,853 L1335,848 L1330,833 L1332,813 L1337,793 L1342,783 Z"/>
+      
+      <ellipse cx="1352" cy="818" rx="5" ry="18" class="land-mountain"/>
+      
+      <path class="land-high" d="M1180,490 L1210,488 L1238,493 L1260,505 L1275,523 L1280,545 L1270,563 L1252,573 L1228,575 L1205,568 L1185,553 L1175,535 L1173,515 L1177,500 Z"/>
+      
+      <ellipse cx="1230" cy="530" rx="15" ry="8" class="land-mountain"/>
+      
+      <path class="border" d="M1050,550 C1100,540 1150,538 1200,545 C1250,552 1300,570 1335,600 C1370,630 1390,670 1395,715 C1400,760 1390,805 1365,840 L1330,870 C1295,895 1255,910 1210,915 C1165,920 1120,915 1080,900 C1040,885 1005,860 980,825 C955,790 940,750 935,705 C930,660 935,615 950,575 C965,535 990,500 1025,475 Z"/>
+    </g>
+    
+    <g id="antarctica" class="continent" role="button" tabindex="0"
+       aria-label="Antártida: El continente helado del polo sur">
+      
+      <ellipse cx="700" cy="750" rx="550" ry="35" class="land-mountain" opacity="0.9"/>
+      
+      <path class="land-mountain" d="M280,720 L295,730 L305,745 L308,765 L302,780 L288,788 L275,783 L268,768 L270,750 L275,735 Z"/>
+      
+      <path class="land-mountain" d="M850,740 L900,738 L945,743 L980,753 L1000,768 L1005,785 L995,795 L970,798 L930,795 L885,788 L850,778 L830,763 L828,748 L835,740 Z"/>
+      
+      <ellipse cx="500" cy="755" rx="80" ry="15" class="land-mountain" opacity="0.7"/>
+      <ellipse cx="900" cy="760" rx="90" ry="12" class="land-mountain" opacity="0.7"/>
+      
+      <path class="border" d="M150,740 C250,730 350,728 450,732 C550,736 650,744 750,750 C850,756 950,758 1050,755 C1150,752 1250,745 1330,740 L1350,745 C1355,755 1355,770 1350,780 L1330,790 C1230,795 1130,798 1030,798 C930,798 830,795 730,790 C630,785 530,778 430,773 C330,768 230,765 150,765 C120,765 100,758 95,750 C90,742 100,735 120,735 Z"/>
+    </g>
+  </g>
+  
+  <g id="labels" opacity="0.8">
+    <text x="240" y="320" class="label">AMÉRICA DEL NORTE</text>
+    <text x="330" y="590" class="label">AMÉRICA DEL SUR</text>
+    <text x="720" y="280" class="label">EUROPA</text>
+    <text x="780" y="450" class="label">ÁFRICA</text>
+    <text x="1030" y="320" class="label">ASIA</text>
+    <text x="1180" y="640" class="label">OCEANÍA</text>
+    <text x="700" y="765" class="label">ANTÁRTIDA</text>
+  </g>
+  
+  <g id="ocean-labels" opacity="0.5">
+    <text x="120" y="400" class="label" fill="#e0f2fe">OCÉANO ATLÁNTICO</text>
+    <text x="600" y="600" class="label" fill="#e0f2fe">OCÉANO ÍNDICO</text>
+    <text x="1100" y="200" class="label" fill="#e0f2fe">OCÉANO PACÍFICO</text>
+    <text x="750" y="120" class="label" fill="#e0f2fe">OCÉANO ÁRTICO</text>
+  </g>
+  
+  <g id="features" opacity="0">
+    <ellipse cx="720" cy="330" rx="80" ry="25" class="ocean-shallow" opacity="0.6"/>
+    <text x="720" y="335" class="label" font-size="11" fill="#0066aa">Mar Mediterráneo</text>
+    
+    <path d="M825,385 L835,410 L840,435 L835,455 L825,465 L818,455 L815,435 L818,410 L823,390 Z" class="ocean-shallow" opacity="0.6"/>
+    
+    <ellipse cx="865" cy="385" rx="20" ry="12" class="ocean-shallow" opacity="0.6"/>
+    
+    <ellipse cx="1200" cy="180" rx="40" ry="30" class="ocean-mid" opacity="0.6"/>
+    
+    <ellipse cx="270" cy="250" rx="18" ry="8" class="ocean-coast" opacity="0.8"/>
+    
+    <ellipse cx="1040" cy="245" rx="8" ry="15" class="ocean-coast" opacity="0.8"/>
+    
+    <path d="M300,510 Q340,515 380,525 Q400,530 410,540" stroke="#4d94cc" stroke-width="2" fill="none" opacity="0.7"/>
+    
+    <path d="M770,370 Q775,400 780,440 Q785,480 795,520 Q800,540 810,560" stroke="#4d94cc" stroke-width="1.5" fill="none" opacity="0.7"/>
+    
+    <path d="M1020,360 Q1060,365 1100,380 Q1130,390 1150,405" stroke="#4d94cc" stroke-width="1.5" fill="none" opacity="0.7"/>
+  </g>
+  
+  <g id="layer-controls" transform="translate(20, 20)">
+    <rect width="200" height="180" rx="8" fill="#1f2937" opacity="0.9"/>
+    
+    <text x="100" y="25" class="ui-title">CAPAS DEL MAPA</text>
+    
+    <g class="toggle-button is-active" data-layer="bathymetry">
+      <rect x="15" y="40" width="170" height="30" rx="4"/>
+      <circle cx="30" cy="55" r="5"/>
+      <text x="45" y="60" class="ui-text">Batimetría Oceánica</text>
+    </g>
+    
+    <g class="toggle-button is-active" data-layer="orography">
+      <rect x="15" y="80" width="170" height="30" rx="4"/>
+      <circle cx="30" cy="95" r="5"/>
+      <text x="45" y="100" class="ui-text">Relieve Terrestre</text>
+    </g>
+    
+    <g class="toggle-button is-active" data-layer="labels">
+      <rect x="15" y="120" width="170" height="30" rx="4"/>
+      <circle cx="30" cy="135" r="5"/>
+      <text x="45" y="140" class="ui-text">Nombres</text>
+    </g>
+    
+    <g class="toggle-button" data-layer="features">
+      <rect x="15" y="155" width="170" height="30" rx="4"/>
+      <circle cx="30" cy="170" r="5"/>
+      <text x="45" y="175" class="ui-text">Mares y Ríos</text>
+    </g>
+  </g>
+  
+  <g id="legend" transform="translate(1180, 20)">
+    <rect width="200" height="260" rx="8" fill="#1f2937" opacity="0.9"/>
+    
+    <text x="100" y="25" class="ui-title">LEYENDA</text>
+    
+    <text x="15" y="50" class="ui-text" font-weight="600">Profundidad oceánica:</text>
+    
+    <rect x="15" y="60" width="30" height="15" class="ocean-deep"/>
+    <text x="50" y="71" class="ui-text" font-size="10" fill="#e0f2fe">&gt; 6000m</text>
+    
+    <rect x="15" y="80" width="30" height="15" class="ocean-mid"/>
+    <text x="50" y="91" class="ui-text" font-size="10" fill="#e0f2fe">2000-6000m</text>
+    
+    <rect x="15" y="100" width="30" height="15" class="ocean-shallow"/>
+    <text x="50" y="111" class="ui-text" font-size="10" fill="#e0f2fe">200-2000m</text>
+    
+    <rect x="15" y="120" width="30" height="15" class="ocean-coast"/>
+    <text x="50" y="131" class="ui-text" font-size="10" fill="#e0f2fe">0-200m</text>
+    
+    <text x="15" y="155" class="ui-text" font-weight="600">Altitud terrestre:</text>
+    
+    <rect x="15" y="165" width="30" height="15" class="land-low"/>
+    <text x="50" y="176" class="ui-text" font-size="10" fill="#1f2937">0-500m</text>
+    
+    <rect x="15" y="185" width="30" height="15" class="land-mid"/>
+    <text x="50" y="196" class="ui-text" font-size="10" fill="#1f2937">500-1500m</text>
+    
+    <rect x="15" y="205" width="30" height="15" class="land-high"/>
+    <text x="50" y="216" class="ui-text" font-size="10" fill="#f1f5f9">1500-3000m</text>
+    
+    <rect x="15" y="225" width="30" height="15" class="land-mountain"/>
+    <text x="50" y="236" class="ui-text" font-size="10" fill="#1f2937">&gt; 3000m</text>
+  </g>
+  
+  <script type="text/javascript"><![CDATA[
+    (function() {
+      'use strict';
+      
+      const svgRoot = document.querySelector('svg');
+      
+      // --- 1. TOGGLE DE CAPAS (MÉTODO MODERNO) ---
+      // Usamos clases en el SVG raíz, controladas por el CSS.
+      
+      const layerToggles = document.querySelectorAll('.toggle-button');
+      
+      layerToggles.forEach(button => {
+        button.addEventListener('click', function() {
+          const layerName = this.getAttribute('data-layer');
+          const hideClassName = 'hide-' + layerName;
+          
+          // Toggle de la clase en el botón (para estilo)
+          this.classList.toggle('is-active');
+          
+          // Toggle de la clase en el SVG raíz (para visibilidad)
+          if (svgRoot.classList.contains(hideClassName)) {
+            svgRoot.classList.remove(hideClassName);
+          } else {
+            svgRoot.classList.add(hideClassName);
+          }
+        });
+      });
+      
+      // Nota: El efecto hover se maneja 100% en CSS (:hover),
+      // no necesitamos JavaScript para eso.
+      
+      // --- 2. INTERACTIVIDAD DE CONTINENTES ---
+      
+      const continents = document.querySelectorAll('.continent');
+      
+      continents.forEach(continent => {
+        continent.addEventListener('click', function() {
+          const name = this.getAttribute('aria-label');
+          const continentId = this.getAttribute('id');
+          
+          // El 'alert()' original es muy molesto para una App.
+          // Es mejor usar un CustomEvent para que tu App (Svelte, React, Vue...)
+          // pueda "escuchar" este evento y reaccionar.
+          
+          console.log('Continente seleccionado:', { id: continentId, name: name });
+          
+          // Ejemplo de cómo emitir un evento personalizado:
+          const event = new CustomEvent('continentClick', {
+            detail: { 
+              id: continentId, 
+              name: name 
+            },
+            bubbles: true, // Permite que el evento "suba" fuera del SVG
+            composed: true // Permite cruzar el "shadow DOM" si lo usas
+          });
+          this.dispatchEvent(event);
+          
+          // Tu app principal podría escuchar con:
+          // document.querySelector('svg').addEventListener('continentClick', (e) => {
+          //   console.log(e.detail.name);
+          //   // Aquí mostrarías el quiz o la info de ese continente.
+          // });
+          
+        });
+        
+        // Esta parte para accesibilidad (Enter/Space) está bien.
+        continent.addEventListener('keypress', function(e) {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            this.click();
+          }
+        });
+      });
+      
+      // --- 3. NAVEGACIÓN POR TECLADO (Accesibilidad) ---
+      // Tu script original de navegación por flechas está bien, lo mantenemos.
+      let currentFocus = 0;
+      const focusableElements = Array.from(continents);
+      
+      document.addEventListener('keydown', function(e) {
+        if (!e.target.closest('.continent')) {
+          // Solo activar navegación por flechas si ya estamos en un continente
+          if (e.key === 'ArrowRight' || e.key === 'ArrowDown' || e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
+              focusableElements[currentFocus].focus();
+          }
+          return;
+        }
+
+        if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
+          e.preventDefault();
+          currentFocus = (currentFocus + 1) % focusableElements.length;
+          focusableElements[currentFocus].focus();
+        }
+        
+        if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
+          e.preventDefault();
+          currentFocus = (currentFocus - 1 + focusableElements.length) % focusableElements.length;
+          focusableElements[currentFocus].focus();
+        }
+      });
+      
+      console.log('🗺️ TerraQuest - Mapa optimizado cargado correctamente');
+      console.log('✅ ' + continents.length + ' continentes interactivos');
+      
+    })();
+  ]]></script>
+</svg>

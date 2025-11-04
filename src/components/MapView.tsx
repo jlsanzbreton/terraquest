@@ -1,5 +1,5 @@
 import React from 'react';
-import WorldMap from '../assets/world-continents.svg?react';
+import WorldMap from '../assets/world-biomes.svg?react';
 import Card from './common/Card';
 import { useGame } from '../contexts/GameContext';
 import Button from './common/Button';
